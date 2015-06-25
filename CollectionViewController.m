@@ -8,12 +8,16 @@
 
 #import "CollectionViewController.h"
 #import "CollectionViewCell.h"
+#import "headerFile.h"
 
 @interface CollectionViewController ()
 
 
 
-@property (strong ,nonatomic) NSArray *gallery;
+
+
+@property (strong, nonatomic) NSArray *gallery;
+
 
 @end
 
@@ -22,8 +26,20 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+
+    NSArray *art = [NSArray arrayWithObjects: @"1.jpg", @"2.jpg", @"3.jpg", nil];
     
- self.gallery = @[@"1.jpg", @"2.jpg", @"3.jpg", @"4.jpg", @"5.jpg", @"6.jpg", @"7.jpg", @"8.jpg", @"9.jpg", @"10.jpg"];
+    NSArray *tech = [NSArray arrayWithObjects: @"4.jpg", @"5.jpg", @"6.jpg", @"7.jpg", nil];
+    
+    NSArray *misc = [NSArray arrayWithObjects: @"8.jpg", @"9.jpg", @"10.jpg", nil];
+    
+    self.gallery = @[art, tech, misc];
+
+
+ //self.gallery = @[@"1.jpg", @"2.jpg", @"3.jpg", @"4.jpg", @"5.jpg", @"6.jpg", @"7.jpg", @"8.jpg", @"9.jpg", @"10.jpg"];
+
+
+    
     
     
     // Uncomment the following line to preserve selection between presentations
@@ -53,27 +69,69 @@
 #pragma mark <UICollectionViewDataSource>
 
 -(NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
-    return 1;
+    return [self.gallery count];
 }
 
 //The number of cells is defined by the size of our array of photos
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
     
-    return [self.gallery count];
+    
+     return [[self.gallery objectAtIndex:section] count];
+    
     
 }
 
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     
-    CollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"PhotoCell" forIndexPath:indexPath];
+    CollectionViewCell *cell = (CollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:@"PhotoCell" forIndexPath:indexPath];
     
-    NSString *myPhotoString = [self.gallery objectAtIndex:indexPath.row];
-    cell.imageView.image = [UIImage imageNamed:myPhotoString];
+    //UIImageView *galleryImageView = (UIImageView *)[cell viewWithTag: 100];
+ 
+    //   galleryImageView.image = [UIImage imageNamed:[galleryImageView[indexPath.section] objectAtIndex.indexPath.row];
+    
+    
+    
+   // NSString *myPhotoString = [self.gallery objectAtIndex:indexPath.row];
+    cell.imageView.image = [UIImage imageNamed:[self.gallery[indexPath.section] objectAtIndex:indexPath.row]];
     
     return cell;
     
 }
 
+-(UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
+    
+    headerFile *headerTitle = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"headerText" forIndexPath:indexPath];
+    
+    headerTitle.headerLabel.text = @"Section Title";
+    
+    NSString *myHeader;
+    
+    switch (indexPath.section) {
+           
+        case 0:
+            myHeader = @"Art Photos";
+            break;
+        case 1:
+            myHeader = @"Tech Photos";
+            break;
+        case 2:
+            myHeader = @"Misc. Photos";
+            break;
+        default:
+            break;
+            
+        }
+    headerTitle.headerLabel.text = myHeader;
+    
+            
+    
+
+        return headerTitle;
+
+
+
+    
+}
 #pragma mark <UICollectionViewDelegate>
 
 /*
